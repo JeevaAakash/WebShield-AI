@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link
+href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap"
+rel="stylesheet"
+/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebShield AI – Smart Website Security Analyzer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Canvas Grid & Orbs -->
+  <div class="cyber-canvas-container">
+    <canvas id="cyber-grid-canvas"></canvas>
+  </div>
+  <div class="glowing-orbs-container">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Header Nav (Shared for Landing/Results, Hidden in Full Dashboard View) -->
+  <header class="main-nav" id="main-navigation">
+<div class="logo" onclick="navigateTo('landing')">
+
+<div class="logo-shield">
+
+<svg viewBox="0 0 24 24">
+
+<path
+d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"
+/>
+
+</svg>
+
+</div>
+
+<h1 class="logo-text">
+
+WebShield
+
+<span>AI</span>
+
+</h1>
+
+</div>
+    
+    <ul class="nav-menu">
+      <li><a href="#why-webshield" onclick="smoothScrollTo('why-webshield')">Why WebShield</a></li>
+      <li><a href="#metrics" onclick="smoothScrollTo('metrics')">Security Metrics</a></li>
+      <li><a href="#pricing" onclick="smoothScrollTo('pricing')">Pricing</a></li>
+      <li><a href="#faq" onclick="smoothScrollTo('faq')">FAQ</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="btn btn-secondary" onclick="navigateTo('dashboard')">
+        <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i>
+        Security Dashboard
+      </button>
+    </div>
+  </header>
+
+  <!-- VIEW 1: Landing Page & Scanner Input -->
+  <div id="view-landing" class="view-container active">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-shield-wrapper">
+        <div class="hero-shield-glow"></div>
+        <div class="hero-shield">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="hero-shield-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="50%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#8b5cf6" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+          </svg>
+        </div>
+      </div>
+      
+      <h2>
+        <span class="gradient-text">Protect Websites with</span><br>
+        <span class="gradient-accent-text">AI-Powered Security Analysis</span>
+      </h2>
+      
+      <p class="lead-text">
+        Scan websites instantly for vulnerability vectors, server misconfigurations, expired SSL setups, and threat scores using advanced signature audits.
+      </p>
+
+      <!-- URL Input Bar -->
+      <div class="scanner-container">
+        <form id="url-scanner-form">
+          <div class="scanner-box">
+            <div class="scanner-icon">
+              <i data-lucide="search" style="width: 22px; height: 22px;"></i>
+            </div>
+            <input type="text" id="target-url-input" class="scanner-input" placeholder="Enter website URL (e.g. https://example.com)" required autocomplete="off">
+ <button
+type="button"
+class="btn btn-primary btn-scan"
+onclick="startScan()">
+
+<span>
+
+Start Scanning
+
+</span>
+
+<i data-lucide="shield-check"></i>
+
+</button>
+          </div>
+        </form>
+        <div class="scanner-placeholder-tip">
+          Or test presets: 
+          <a href="#" onclick="quickScan('google.com')">google.com</a> &bull; 
+          <a href="#" onclick="quickScan('github.com')">github.com</a> &bull; 
+          <a href="#" onclick="quickScan('vulnweb.com')">vulnweb.com (Vulnerable preset)</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why WebShield Section -->
+    <section class="info-section" id="why-webshield">
+      <div class="section-header">
+        <h3>Why WebShield AI?</h3>
+        <p>A multi-layered vulnerability scanner and server configuration auditing suite designed for modern web apps.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="glass-card blue">
+          <div class="feature-icon-box">
+            <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
+          </div>
+          <h4 class="feature-title">Subsecond Scans</h4>
+          <p class="feature-desc">Utilizes concurrent audit pipelines to resolve DNS structures, verify SSL chains, and read headers in less than a second.</p>
+        </div>
+        
+        <div class="glass-card purple-icon">
+          <div class="feature-icon-box">
+            <i data-lucide="brain" style="width: 22px; height: 22px;"></i>
+          </div>
+          <h4 class="feature-title">AI Diagnostics</h4>
+          <p class="feature-desc">Interprets server signatures and code parameters to produce contextual vulnerability descriptions and mitigation code blocks.</p>
+        </div>
+        
+        <div class="glass-card cyan-icon">
+          <div class="feature-icon-box">
+            <i data-lucide="shield" style="width: 22px; height: 22px;"></i>
+          </div>
+          <h4 class="feature-title">Hardened Recommendations</h4>
+          <p class="feature-desc">Provides Nginx blocks, security header parameters, and firewall rules to immediately close security gaps.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Metrics Section -->
+    <section class="info-section" id="metrics">
+      <div class="section-header">
+        <h3>Live Global Security Feed</h3>
+        <p>Aggregated real-time metrics showing scanning activities and threats detected globally.</p>
+      </div>
+      
+      <div class="metrics-panel">
+        <div class="glass-card metric-card">
+          <div class="metric-number" id="m-scans">14,295</div>
+          <div class="metric-label">Sites Audited</div>
+        </div>
+        
+        <div class="glass-card metric-card">
+          <div class="metric-number" id="m-threats" style="color: var(--danger);">3,842</div>
+          <div class="metric-label">Vulnerabilities Flagged</div>
+        </div>
+        
+        <div class="glass-card metric-card">
+          <div class="metric-number" id="m-ssl">94.8%</div>
+          <div class="metric-label">Average SSL Health</div>
+        </div>
+        
+        <div class="glass-card metric-card">
+          <div class="metric-number" id="m-active">432</div>
+          <div class="metric-label">Active Scans/Hr</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+      <div class="section-header">
+        <h3>Pricing Plans</h3>
+        <p>Deploy professional web scanner monitors for teams of any size.</p>
+      </div>
+      
+      <div class="pricing-plans">
+        <div class="glass-card pricing-card">
+          <h4 class="pricing-name">Free Tier</h4>
+          <div class="pricing-price">$0 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> 5 Scans per day</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> SSL & DNS Checks</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> Basic Port Inspection</li>
+            <li style="color: var(--text-muted); opacity: 0.5;"><i data-lucide="x" style="width: 16px; height: 16px; color: var(--danger);"></i> AI Diagnostics Summary</li>
+            <li style="color: var(--text-muted); opacity: 0.5;"><i data-lucide="x" style="width: 16px; height: 16px; color: var(--danger);"></i> Continuous Domain Monitoring</li>
+          </ul>
+          <button class="btn btn-secondary" style="width: 100%;" onclick="smoothScrollTo('url-scanner-form')">Try Free Scanner</button>
+        </div>
+        
+        <div class="glass-card pricing-card popular">
+          <div class="pricing-badge">Recommended</div>
+          <h4 class="pricing-name">WebShield Pro</h4>
+          <div class="pricing-price">$29 <span>/ month</span></div>
+          <ul class="pricing-features">
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> Unlimited Scans</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> Deep Port & Folder Scan</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> AI Remediation Engine</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> REST API access</li>
+            <li><i data-lucide="check" style="width: 16px; height: 16px;"></i> Slack & Webhook Alerts</li>
+          </ul>
+          <button class="btn btn-primary" style="width: 100%;">Upgrade to Pro</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+      <div class="section-header">
+        <h3>Frequently Asked Questions</h3>
+      </div>
+      
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What parameters does WebShield AI evaluate?</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            WebShield AI performs checks on five primary security markers: DNSSEC record configs, SSL/TLS certificate chains and cipher version support, HTTP Security Headers (HSTS, CSP, X-Frame-Options), system port listings, and exposed directories/backups.
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Will this scan negatively impact my server performance?</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            No. The checks are purely non-intrusive metadata reviews of public headers, certificate handshake endpoints, and DNS registry zones. We do not conduct high-traffic DDoS tests or brute-force logins.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How is the Security Score calculated?</span>
+            <i data-lucide="chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            The rating starts at 100. Deductions are dynamically applied based on vulnerability severity weights: Critical items (expired certificates, open DB ports) deduct 20-25 points, high items (missing CSP) deduct 15 points, and low items (server metadata leaks) deduct 3-5 points.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+
+<div class="footer-content">
+
+<div class="footer-brand">
+
+<div class="logo">
+
+<div class="logo-shield">
+
+<svg viewBox="0 0 24 24">
+<path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+</svg>
+
+</div>
+
+<h1 class="logo-text">
+
+WebShield
+
+<span>AI</span>
+
+</h1>
+
+</div>
+
+<p class="footer-desc">
+
+AI-powered endpoint diagnostics and server hardening recommendations to protect SaaS architectures.
+
+</p>
+
+</div>
+
+
+<div class="footer-links-col">
+
+<h4 class="footer-col-title">
+
+PRODUCT
+
+</h4>
+
+<ul>
+
+<li><a href="#">Features</a></li>
+
+<li><a href="#">Pricing</a></li>
+
+<li><a href="#">Security Audits</a></li>
+
+</ul>
+
+</div>
+
+
+<div class="footer-links-col">
+
+<h4 class="footer-col-title">
+
+DEVELOPER
+
+</h4>
+
+<ul>
+
+<li><a href="#">Dashboard API</a></li>
+
+<li><a href="#">Documentation</a></li>
+
+<li><a href="#">Github Repository</a></li>
+
+</ul>
+
+</div>
+
+
+<div class="footer-links-col">
+
+<h4 class="footer-col-title">
+
+LEGAL
+
+</h4>
+
+<ul>
+
+<li><a href="#">Privacy Policy</a></li>
+
+<li><a href="#">Terms Of Use</a></li>
+
+<li><a href="#">Contact Support</a></li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<p>
+
+© 2026 WebShield AI
+
+</p>
+
+<p>
+
+Developed By Jeeva Aakash
+</p>
+
+</div>
+
+</footer>
+  </div>
+
+  <!-- VIEW 2: Interactive Scan Transitions Screen -->
+  <div id="view-scanning" class="view-container">
+    <div class="scan-view-inner">
+      <div class="scan-radar-wrapper">
+        <div class="scan-radar-ring"></div>
+        <div class="scan-radar-pulse"></div>
+        <div class="scan-radar-shield">
+          <i data-lucide="shield-alert" style="width: 28px; height: 28px; stroke-width: 2.2;"></i>
+        </div>
+      </div>
+      
+      <h3 class="scan-title">AI Diagnostics Engine Active</h3>
+      <p class="scan-subtitle">Evaluating security endpoints for <span id="scanning-target-url" style="color: var(--secondary); font-weight:600;">google.com</span></p>
+      
+      <div class="scan-steps">
+        <div class="scan-step-item" id="step-dns">
+          <div class="scan-step-label">
+            <i data-lucide="network" style="width: 18px; height: 18px;"></i>
+            DNS Registry Audits & DNSSEC Checks
+          </div>
+          <div class="scan-spinner"></div>
+          <i data-lucide="check-circle" class="scan-check-icon"></i>
+        </div>
+        
+        <div class="scan-step-item pending" id="step-ssl">
+          <div class="scan-step-label">
+            <i data-lucide="lock" style="width: 18px; height: 18px;"></i>
+            SSL/TLS Cryptographic Cipher Analysis
+          </div>
+          <div class="scan-spinner"></div>
+          <i data-lucide="check-circle" class="scan-check-icon"></i>
+        </div>
+        
+        <div class="scan-step-item pending" id="step-headers">
+          <div class="scan-step-label">
+            <i data-lucide="file-key" style="width: 18px; height: 18px;"></i>
+            HTTP Transport Security Headers Inspection
+          </div>
+          <div class="scan-spinner"></div>
+          <i data-lucide="check-circle" class="scan-check-icon"></i>
+        </div>
+        
+        <div class="scan-step-item pending" id="step-vulns">
+          <div class="scan-step-label">
+            <i data-lucide="search-code" style="width: 18px; height: 18px;"></i>
+            Exposed Directories & Port Vulnerability Check
+          </div>
+          <div class="scan-spinner"></div>
+          <i data-lucide="check-circle" class="scan-check-icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 3: Scan Results Analytics View -->
+  <div id="view-results" class="view-container">
+    <div class="results-header-container">
+      <button class="results-back-btn" onclick="navigateTo('landing')">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Scanner
+      </button>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-secondary" onclick="navigateTo('landing')">Scan Another Site</button>
+        <button class="btn btn-primary" onclick="navigateTo('dashboard')">Open Dashboard View</button>
+      </div>
+    </div>
+    
+    <div class="results-layout">
+      <!-- Score Ring & Metadata Panel -->
+      <div class="score-circle-panel">
+        <div class="glass-card" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+          <h4 style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Vulnerability Trust Score</h4>
+          
+          <div class="score-svg-wrapper">
+            <svg class="score-svg" viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="score-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ef4444" id="score-grad-start" />
+                  <stop offset="50%" stop-color="#f59e0b" id="score-grad-mid" />
+                  <stop offset="100%" stop-color="#10b981" id="score-grad-end" />
+                </linearGradient>
+              </defs>
+              <circle class="score-circle-bg" cx="100" cy="100" r="90" />
+              <circle id="results-score-fill" class="score-circle-fill" cx="100" cy="100" r="90" />
+            </svg>
+            <div class="score-display-text">
+              <span id="results-score-value" class="score-value">0</span>
+              <span class="score-max">/ 100 pts</span>
+            </div>
+           
+          </div>
+          
+          <span id="results-badge" class="badge safe">Exceptional</span>
+          
+          <!-- Metadata details -->
+          <div class="score-meta-grid">
+            <div class="score-meta-item">
+              <div class="score-meta-label">Domain Audited</div>
+              <div id="results-meta-domain" class="score-meta-value monospace" style="color: var(--secondary);"><span id="domain-name">
+
+Waiting...
+
+</span></div>
+            </div>
+            <div class="score-meta-item">
+              <div class="score-meta-label">SSL Issuer</div>
+              <div id="results-meta-ssl" class="score-meta-value">Google CA</div>
+            </div>
+            <div class="score-meta-item">
+              <div class="score-meta-label">SSL Handshake</div>
+              <div id="results-meta-ssl-status" class="score-meta-value">TLS 1.3 Active</div>
+            </div>
+            <div class="score-meta-item">
+              <div class="score-meta-label">DNSSEC Sign</div>
+              <div id="results-meta-dnssec" class="score-meta-value">Active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- AI Recommendation & Detailed checklist accordions -->
+      <div class="findings-panel">
+        <!-- AI Card -->
+        <div class="glass-card ai-card">
+          <div class="ai-avatar">
+            <i data-lucide="bot" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div>
+            <h5 class="ai-title">ShieldBot AI Audit Analyst</h5>
+            <p id="results-ai-summary" class="ai-text">Analyzing diagnostic parameters...</p>
+          </div>
+        </div>
+        
+        <!-- Checklist findings -->
+        <div class="findings-list-wrapper">
+          <h4 id="findings-count-title">Vulnerability Findings & Server Warnings</h4>
+          <div id="findings-accordions-container">
+            <!-- Accordion cards dynamically loaded -->
+          </div>
+        </div>
+     </div><!-- findings-panel -->
+
+
+<div class="ai-assistant-card">
+
+<h3>🧠 WebShield AI</h3>
+
+<div class="webshield-chat">
+
+<div id="chat-window" class="chat-window">
+
+<div class="bot-msg">
+👋 Hello! Ask me about this website.
+</div>
+
+</div>
+
+<div class="chat-controls">
+
+<input
+id="chat-input"
+placeholder="Ask about security..."
+>
+
+<button id="chat-send">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div><!-- results-layout -->
+  </div>
+
+  <!-- VIEW 4: SaaS Product Admin Dashboard -->
+  <div id="view-dashboard" class="view-container">
+    <div class="dashboard-layout">
+      <!-- Sidebar panel -->
+      <aside class="dashboard-sidebar">
+        <ul class="dashboard-menu">
+          <li class="active" data-dashpanel="overview">
+            <button>
+              <i data-lucide="layout-dashboard"></i>
+              Overview
+            </button>
+          </li>
+          <li data-dashpanel="monitors">
+            <button>
+              <i data-lucide="activity"></i>
+              Active Monitors
+            </button>
+          </li>
+          <li data-dashpanel="analytics">
+            <button>
+              <i data-lucide="bar-chart-3"></i>
+              Risk Analytics
+            </button>
+          </li>
+  
+<li style="margin-top: 20px; border-top: 1px solid var(--border-glass); padding-top: 15px;">
+              <button onclick="navigateTo('landing')">
+              <i data-lucide="log-out"></i>
+              Back To Scanner Home
+            </button>
+          </li>
+        </ul>
+      </aside>
+      
+      <!-- Main Dashboard display -->
+      <div class="dashboard-content-area">
+        <!-- Panel 1: Overview Panel -->
+        <div id="dashpanel-overview" class="dashboard-view-panel active">
+          <div class="dash-header-row">
+            <div class="dash-header-title">
+              <h4>Vulnerability Risk Intelligence Dashboard</h4>
+              <p>Aggregated metrics and audit statistics from your domains</p>
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('landing')">
+              <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Scan New Website
+            </button>
+          </div>
+          
+          <!-- Metrics grid -->
+          <div class="dash-metrics-grid">
+            <div class="glass-card">
+              <div class="metric-label">Sites Monitored</div>
+              <div class="metric-number" id="dash-stat-monitors" style="font-size: 1.8rem; margin-top: 6px;">3</div>
+            </div>
+            <div class="glass-card">
+              <div class="metric-label">Avg Security Score</div>
+              <div class="metric-number" id="dash-stat-avg-score" style="font-size: 1.8rem; margin-top: 6px; color: var(--secondary);">87</div>
+            </div>
+            <div class="glass-card">
+              <div class="metric-label">Vulnerabilities Found</div>
+              <div class="metric-number" id="dash-stat-vulns" style="font-size: 1.8rem; margin-top: 6px; color: var(--danger);">5</div>
+            </div>
+            <div class="glass-card">
+              <div class="metric-label">SSL Expiry Alert</div>
+              <div class="metric-number" id="dash-stat-ssl" style="font-size: 1.8rem; margin-top: 6px; color: var(--warning);">1</div>
+            </div>
+          </div>
+          
+          <div class="dash-panel-row-large">
+            <!-- Scan history table -->
+            <div class="glass-card">
+              <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                <h4 style="font-size: 1rem; font-weight:700;">Recent Domain Scans</h4>
+                <span style="font-size: 0.75rem; color:var(--text-muted);">Stored via Local Storage</span>
+              </div>
+              
+              <div class="history-table-wrapper">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Domain</th>
+                      <th>Rating Score</th>
+                      <th>SSL Status</th>
+                      <th>Vulnerability Count</th>
+                      <th style="text-align: right;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-history-tbody">
+                    <!-- History lines dynamically appended -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Global Risk heatcells -->
+            <div class="glass-card">
+              <h4 style="font-size: 1rem; font-weight:700; margin-bottom: 20px;">Security Health Check</h4>
+              
+              <div class="heatmap-cards-grid">
+                <div class="heatmap-cell">
+                  <div class="heatmap-cell-title">HSTS Shield</div>
+                  <div class="heatmap-cell-value safe" id="hm-hsts">PASS</div>
+                </div>
+                <div class="heatmap-cell">
+                  <div class="heatmap-cell-title">CSP Rules</div>
+                  <div class="heatmap-cell-value danger" id="hm-csp">FAIL</div>
+                </div>
+                <div class="heatmap-cell">
+                  <div class="heatmap-cell-title">DNSSEC State</div>
+                  <div class="heatmap-cell-value warning" id="hm-dns">WARN</div>
+                </div>
+                <div class="heatmap-cell">
+                  <div class="heatmap-cell-title">Clickjack</div>
+                  <div class="heatmap-cell-value safe" id="hm-click">PASS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Charts metrics row -->
+          <div class="dash-panel-row-large">
+            <div class="glass-card">
+              <h4 style="font-size: 1rem; font-weight:700; margin-bottom: 20px;">Security Compliance Auditing Timeline</h4>
+              <div style="height: 250px; position:relative;">
+                <canvas id="dashTimelineChart"></canvas>
+              </div>
+            </div>
+            
+            <div class="glass-card">
+              <h4 style="font-size: 1rem; font-weight:700; margin-bottom: 20px;">vulnerability distribution</h4>
+              <div style="height: 250px; position:relative;">
+                <canvas id="dashDoughnutChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Panel 2: Active Monitors Panel -->
+        <div id="dashpanel-monitors" class="dashboard-view-panel">
+          <div class="dash-header-row">
+            <div class="dash-header-title">
+              <h4>Continuous Domain Monitors</h4>
+              <p>Configure automated domain checks every 24 hours</p>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="padding: 40px; text-align:center; color: var(--text-muted); margin-bottom: 24px;">
+            <i data-lucide="bell-ring" style="width: 48px; height: 48px; color: var(--accent); margin-bottom: 16px;"></i>
+            <h5>Pro Feature Alert</h5>
+            <p style="font-size: 0.88rem; max-width: 400px; margin: 8px auto 24px;">
+              Automatically scan endpoints every day and send reports directly to Slack, email, or Webhooks.
+            </p>
+            <button class="btn btn-primary">Upgrade to WebShield Pro</button>
+          </div>
+        </div>
+        
+        <!-- Panel 3: Risk Analytics Panel -->
+        <div id="dashpanel-analytics" class="dashboard-view-panel">
+          <div class="dash-header-row">
+            <div class="dash-header-title">
+              <h4>Advanced Threat Vulnerability Analytics</h4>
+              <p>Aggregated vulnerability analysis and remediation metrics</p>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="padding: 24px;">
+            <p style="font-size: 0.9rem; margin-bottom: 16px;">
+              Vulnerability analytics parses HTTP configuration anomalies and correlates threat variables across domains.
+            </p>
+            <div style="height: 300px; position:relative;">
+              <canvas id="dashRadarChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Panel 4: Portal Settings Panel -->
+        <div id="dashpanel-settings" class="dashboard-view-panel">
+          <div class="dash-header-row">
+            <div class="dash-header-title">
+              <h4>Portal Configurations</h4>
+              <p>Manage security API keys, portals, and webhook settings</p>
+            </div>
+          </div>
+          
+          <div class="glass-card" style="max-width: 600px;">
+            <h4 style="font-size: 1rem; margin-bottom: 20px;">API Keys Management</h4>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label style="font-size: 0.75rem; color:var(--text-muted); font-weight:600;">WebShield API Hardening Key</label>
+                <div style="display:flex; gap:12px;">
+                  <input type="text" class="btn btn-secondary" style="font-family: monospace; font-size: 0.8rem; cursor:text; flex-grow:1; text-align:left;" value="ws_live_8b5cf63b82f606b6d4060b18" readonly>
+                  <button class="btn btn-primary" onclick="alert('API Key copied!')">Copy Key</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Visible only on Screens <= 768px) -->
+  <div class="mobile-bottom-nav">
+    <button class="mobile-nav-item active" id="m-nav-landing" onclick="navigateTo('landing')">
+      <i data-lucide="shield-check"></i>
+      Scanner
+    </button>
+    <button class="mobile-nav-item" id="m-nav-dashboard" onclick="navigateTo('dashboard')">
+      <i data-lucide="layout-dashboard"></i>
+      Dashboard
+    </button>
+    <button class="mobile-nav-item" onclick="smoothScrollTo('pricing')">
+      <i data-lucide="credit-card"></i>
+      Pricing
+    </button>
+  </div>
+
+  <!-- CDNs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="mockReports.js"></script>
+<script src="./app.js"></script>
+  <div id="notify" class="notify-box"></div>
+</body>
+</html>
