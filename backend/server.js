@@ -27,9 +27,6 @@ connectDB();
 const app =
 express();
 
-/* MIDDLEWARE */
-const cors =
-require("cors");
 
 app.use(
 
