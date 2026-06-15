@@ -4,25 +4,25 @@ require("express");
 const router =
 express.Router();
 
+const axios =
+require("axios");
+
 const scanWebsite =
 require(
 "../services/scanService"
 );
 
+
 const Scan =
 require(
-"../models/Scan"
-);
-
-const axios =
-require(
-"axios"
+"../models/scan"
 );
 
 router.post(
+
 "/scan",
 
-async (
+async(
 req,
 res
 )=>{
@@ -31,12 +31,16 @@ try{
 
 const {
 url
-} =
+}
+=
+
 req.body;
 
 if(!url){
 
-return res.status(400).json({
+return res
+.status(400)
+.json({
 
 error:
 "Website URL required"
@@ -58,7 +62,9 @@ result
 let aiScore = {
 
 score:null,
+
 risk:null,
+
 summary:null
 
 };
@@ -75,30 +81,7 @@ await axios.post(
 website:
 url,
 
-report:{
-
-domain:
-result.domain,
-
-score:
-result.score,
-
-valid:
-result.valid,
-
-sslIssuer:
-result.sslIssuer,
-
-daysRemaining:
-result.daysRemaining,
-
-dnssec:
-result.dnssec,
-
-findings:
-result.findings || []
-
-},
+report:result,
 
 question:
 `
@@ -111,22 +94,22 @@ ${url}
 SSL:
 ${result.valid}
 
-Issuer:
+SSL Issuer:
 ${result.sslIssuer}
 
 DNSSEC:
 ${result.dnssec}
 
 Findings:
-${JSON.stringify(result.findings)}
+${JSON.stringify(
+result.findings
+)}
 
 Return EXACT format:
 
 Score: 0-100
 Risk: LOW|MEDIUM|HIGH
 Summary: short explanation
-
-Different websites MUST return different scores.
 
 `
 
@@ -157,50 +140,33 @@ text.match(
 aiScore = {
 
 score:
-
 score
 ?
-
 parseInt(
 score[1]
 )
-
 :
-
 null,
 
 risk:
-
 risk
 ?
-
-risk[1].trim()
-
+risk[1]
 :
-
 null,
 
 summary:
-
 summary
 ?
-
-summary[1].trim()
-
+summary[1]
 :
-
-text
+null
 
 };
 
-console.log(
-"GEMINI:",
-aiScore
-);
-
 }
 
-catch(err){
+catch{
 
 console.log(
 "AI skipped"
@@ -221,13 +187,11 @@ Math.min(
 Number(
 aiScore.score
 )
-
 ||
 
 Number(
 result.score
 )
-
 ||
 
 50
@@ -253,27 +217,7 @@ result.risk
 
 ||
 
-(
-
-finalScore < 50
-
-?
-
-"HIGH"
-
-:
-
-finalScore < 80
-
-?
-
-"MEDIUM"
-
-:
-
-"LOW"
-
-),
+"LOW",
 
 aiSummary:
 
@@ -285,15 +229,7 @@ result.aiSummary
 
 ||
 
-"Security scan completed.",
-
-findings:
-
-result.findings
-
-||
-
-[]
+"Security analysis completed"
 
 };
 
