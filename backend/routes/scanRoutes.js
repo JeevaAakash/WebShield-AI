@@ -74,7 +74,7 @@ try{
 const ai =
 await axios.post(
 
-"http://localhost:5000/api/ask-ai",
+"https://webshield-ai-wb47.onrender.com/api/ask-ai",
 
 {
 

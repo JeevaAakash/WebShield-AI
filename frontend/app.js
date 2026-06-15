@@ -2,7 +2,7 @@ console.log(
 "APP LOADED"
 );
 const API =
-"http://localhost:5000/api";
+"https://webshield-ai-wb47.onrender.com/api";
 const appState = {
   currentView: "landing",
   scannedHistory: [],
@@ -1127,7 +1127,7 @@ try{
 const response =
 await fetch(
 
-"http://localhost:5000/api/ask-ai",
+"https://webshield-ai-wb47.onrender.com/api/ask-ai",
 
 {
 

@@ -28,8 +28,23 @@ const app =
 express();
 
 /* MIDDLEWARE */
+const cors =
+require("cors");
+
 app.use(
-cors()
+
+cors({
+
+origin:[
+
+"https://web-shield-7uh3r6c8l-jeevamsja1-7608s-projects.vercel.app"
+
+],
+
+credentials:true
+
+})
+
 );
 
 app.use(
