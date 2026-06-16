@@ -57,49 +57,115 @@ report
 =
 req.body;
 
-const prompt = `
+
+/* CHAT MODE */
+
+if(
+question &&
+question.trim().length>0 &&
+!question.includes(
+"Generate"
+)
+){
+
+const chatPrompt = `
 
 You are WebShield AI.
 
-Analyze this website using real collected scan data.
+Website:
+${website}
+
+Current Score:
+${report?.score}
+
+Risk:
+${report?.risk}
+
+SSL:
+${report?.valid}
+
+DNSSEC:
+${report?.dnssec}
+
+User:
+${question}
+
+Reply naturally.
+
+`;
+
+const result =
+await ai.models.generateContent({
+
+model:
+"gemini-2.5-flash",
+
+contents:
+chatPrompt
+
+});
+
+return res.json({
+
+reply:
+
+result.text
+
+||
+
+"AI unavailable"
+
+});
+
+}
+
+
+/* SCORE MODE */
+
+const prompt = `
+
+You are WebShield Security AI.
+
+Analyze:
 
 Website:
 ${website}
 
 SSL:
-${report.valid}
+${report?.valid}
 
-Days:
-${report.daysRemaining}
+Days Remaining:
+${report?.daysRemaining}
 
 Issuer:
-${report.sslIssuer}
+${report?.sslIssuer}
 
-HSTS:
-${report.hsts}
-
-CSP:
-${report.csp}
-
-Frame:
-${report.frameProtection}
+DNSSEC:
+${report?.dnssec}
 
 Findings:
 ${JSON.stringify(
-report.findings
+report?.findings || []
 )}
 
-Generate:
+Return EXACTLY:
 
-Score (0-100)
+Score: number
 
-Risk
+Risk:
+LOW
+or
+MEDIUM
+or
+HIGH
 
-Short Summary
+Summary:
+4 sentence explanation.
 
-Return plain text.
+Different websites MUST return different scores.
 
 `;
+
 const result =
 await ai.models.generateContent({
 
@@ -111,7 +177,7 @@ prompt
 
 });
 
-res.json({
+return res.json({
 
 reply:
 
@@ -131,12 +197,12 @@ console.log(
 error
 );
 
-res
+return res
 .status(500)
 .json({
 
 reply:
-"AI temporarily unavailable."
+"Connection failed"
 
 });
 
