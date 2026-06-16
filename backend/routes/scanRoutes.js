@@ -81,19 +81,39 @@ await axios.post(
 website:
 url,
 
-report:result,
+report:{
+
+domain:
+result.domain,
+
+ssl:
+result.valid,
+
+sslIssuer:
+result.sslIssuer,
+
+daysRemaining:
+result.daysRemaining,
+
+dnssec:
+result.dnssec,
+
+findings:
+result.findings || []
+
+},
 
 question:
 `
 
 You are WebShield Security AI.
 
-Analyze ONLY the provided scan data.
+Analyze the website.
 
 Domain:
 ${url}
 
-SSL Valid:
+SSL:
 ${result.valid}
 
 SSL Issuer:
@@ -106,31 +126,13 @@ DNSSEC:
 ${result.dnssec}
 
 Findings:
-${JSON.stringify(
-result.findings || []
-)}
+${JSON.stringify(result.findings || [])}
 
-Rules:
-
-Start score at 100.
-
-Expired SSL:
--30
-
-DNSSEC disabled:
--10
-
-Each vulnerability:
--15
-
-Missing headers:
--10
-
-Never give identical scores.
+Generate REALISTIC security analysis.
 
 Return EXACTLY:
 
-Score: <number>
+Score: <0-100>
 
 Risk:
 LOW
@@ -140,7 +142,19 @@ or
 HIGH
 
 Summary:
-Explain briefly.
+Write 4 sentences.
+
+Rules:
+
+Score must change for different websites.
+
+Strong SSL → higher.
+
+Missing security headers → lower.
+
+Expired certificate → much lower.
+
+Never return same score.
 
 `
 
@@ -153,45 +167,41 @@ ai.data.reply
 ||
 "";
 
-const score =
-text.match(
-/score:\s*(\d+)/i
-);
-
-const risk =
-text.match(
-/risk:\s*(LOW|MEDIUM|HIGH)/i
-);
-
-const summary =
-text.match(
-/summary:\s*([\s\S]*)/i
-);
-
 aiScore = {
 
 score:
-score
-?
+
 parseInt(
-score[1]
+
+text.match(
+/score:\s*(\d+)/i
+)?.[1]
+
 )
-:
+
+||
+
 null,
 
 risk:
-risk
-?
-risk[1].trim()
-:
+
+text.match(
+/risk:\s*(LOW|MEDIUM|HIGH)/i
+)?.[1]
+
+||
+
 null,
 
 summary:
-summarys
-?
-summary[1]
-:
-null
+
+text.match(
+/summary:\s*([\s\S]*)/i
+)?.[1]
+
+||
+
+text
 
 };
 
