@@ -32,13 +32,23 @@ app.use(
 
 cors({
 
-origin:[
+origin:true,
 
-"https://web-shield-7uh3r6c8l-jeevamsja1-7608s-projects.vercel.app"
+credentials:true,
+
+methods:[
+
+"GET",
+"POST"
 
 ],
 
-credentials:true
+allowedHeaders:[
+
+"Content-Type",
+"Authorization"
+
+]
 
 })
 
