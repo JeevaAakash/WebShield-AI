@@ -9,13 +9,43 @@ router.post(
 "/ask-ai",
 
 async(
-
 req,
 res
-
 )=>{
 
 try{
+
+const {
+GoogleGenAI
+} =
+require(
+"@google/genai"
+);
+
+const apiKey =
+process.env.GEMINI_API_KEY;
+
+if(
+!apiKey
+){
+
+return res
+.status(500)
+.json({
+
+reply:
+"Gemini API key missing"
+
+});
+
+}
+
+const ai =
+new GoogleGenAI({
+
+apiKey
+
+});
 
 const {
 
@@ -24,78 +54,89 @@ question,
 report
 
 }
-
 =
-
 req.body;
 
-const reply = `
+const prompt = `
+
+You are WebShield AI.
+
+Analyze this website using real collected scan data.
 
 Website:
 ${website}
 
-Question:
-${question}
-
-Current Security:
-
 SSL:
-${report?.valid ? "Secure" : "Unsafe"}
+${report.valid}
 
-DNSSEC:
-${report?.dnssec ? "Enabled" : "Not Available"}
+Days:
+${report.daysRemaining}
 
-Score:
-${report?.score || "Unknown"}
+Issuer:
+${report.sslIssuer}
 
-Analysis:
+HSTS:
+${report.hsts}
 
-This website appears ${
-report?.score > 80
-?
+CSP:
+${report.csp}
 
-"secure"
+Frame:
+${report.frameProtection}
 
-:
+Findings:
+${JSON.stringify(
+report.findings
+)}
 
-report?.score > 50
-?
+Generate:
 
-"moderately secure"
+Score (0-100)
 
-:
+Risk
 
-"high risk"
+Short Summary
 
-}.
+Return plain text.
 
 `;
+const result =
+await ai.models.generateContent({
 
-return res.json({
+model:
+"gemini-2.5-flash",
 
-reply
+contents:
+prompt
+
+});
+
+res.json({
+
+reply:
+
+result.text
+
+||
+
+"No analysis generated"
 
 });
 
 }
 
-catch(
-
-error
-
-){
+catch(error){
 
 console.log(
 error
 );
 
-return res
+res
 .status(500)
 .json({
 
 reply:
-
-"AI unavailable"
+"AI temporarily unavailable."
 
 });
 
