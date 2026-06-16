@@ -86,30 +86,61 @@ report:result,
 question:
 `
 
-Analyze website security.
+You are WebShield Security AI.
 
-Website:
+Analyze ONLY the provided scan data.
+
+Domain:
 ${url}
 
-SSL:
+SSL Valid:
 ${result.valid}
 
 SSL Issuer:
 ${result.sslIssuer}
+
+Days Remaining:
+${result.daysRemaining}
 
 DNSSEC:
 ${result.dnssec}
 
 Findings:
 ${JSON.stringify(
-result.findings
+result.findings || []
 )}
 
-Return EXACT format:
+Rules:
 
-Score: 0-100
-Risk: LOW|MEDIUM|HIGH
-Summary: short explanation
+Start score at 100.
+
+Expired SSL:
+-30
+
+DNSSEC disabled:
+-10
+
+Each vulnerability:
+-15
+
+Missing headers:
+-10
+
+Never give identical scores.
+
+Return EXACTLY:
+
+Score: <number>
+
+Risk:
+LOW
+or
+MEDIUM
+or
+HIGH
+
+Summary:
+Explain briefly.
 
 `
 
@@ -129,12 +160,12 @@ text.match(
 
 const risk =
 text.match(
-/risk:\s*(.+)/i
+/risk:\s*(LOW|MEDIUM|HIGH)/i
 );
 
 const summary =
 text.match(
-/summary:\s*(.+)/is
+/summary:\s*([\s\S]*)/i
 );
 
 aiScore = {
@@ -151,12 +182,12 @@ null,
 risk:
 risk
 ?
-risk[1]
+risk[1].trim()
 :
 null,
 
 summary:
-summary
+summarys
 ?
 summary[1]
 :
