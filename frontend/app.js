@@ -1196,7 +1196,8 @@ async function sendMessage(){
 const text =
 input.value.trim();
 
-if(!text) return;
+if(!text)
+return;
 
 windowBox.innerHTML += `
 <div class="user-msg">
@@ -1214,36 +1215,39 @@ try{
 
 const response =
 await fetch(
+
+"https://webshield-ai-wb47.onrender.com/api/ask-ai",
+
 {
 
-method:"POST",
+method:
+"POST",
 
 headers:{
-"Content-Type":"application/json"
+
+"Content-Type":
+"application/json"
+
 },
 
-body:JSON.stringify({
+body:
 
-contents:[
+JSON.stringify({
 
-{
-parts:[
+website:
 
-{
-text:
-`You are WebShield AI.
+appState
+?.activeReport
+?.domain,
 
-Answer only website security related questions.
+question:
 
-User:
-${text}`
-}
+text,
 
-]
+report:
 
-}
-
-]
+appState
+?.activeReport
 
 })
 
@@ -1254,68 +1258,31 @@ ${text}`
 const data =
 await response.json();
 
-windowBox.lastElementChild.remove();
+windowBox.lastElementChild.innerHTML =
 
-windowBox.innerHTML += `
-<div class="bot-msg">
-
-${
-data?.candidates?.[0]
-?.content
-?.parts?.[0]
-?.text
+data.reply
 
 ||
 
-"No response"
-}
-
-</div>
-`;
-
-}
-catch{
-
-windowBox.innerHTML += `
-<div class="bot-msg">
-Connection failed
-</div>
-`;
+"No response";
 
 }
 
-windowBox.innerHTML += `
-<div class="bot-msg">
-${reply}
-</div>
-`;
+catch(error){
+
+windowBox.lastElementChild.innerHTML =
+
+"Connection failed";
+
+console.log(
+error
+);
+
+}
 
 input.value="";
 
 windowBox.scrollTop =
 windowBox.scrollHeight;
-
-}
-
-function generateReply(msg){
-
-msg = msg.toLowerCase();
-
-if(msg.includes("ssl"))
-return "SSL status is currently secure.";
-
-if(msg.includes("hsts"))
-return "HSTS protection is enabled.";
-
-if(msg.includes("dns"))
-return "DNS configuration analyzed successfully.";
-
-if(msg.includes("score"))
-return "Current trust score is moderate.";
-
-if(msg.includes("vulnerability"))
-return "No major vulnerabilities detected.";
-
-return "Analysis completed. Website appears operational.";
 
 }
