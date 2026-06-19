@@ -935,21 +935,6 @@ return;
 
 }
 
-const websitePattern =
-/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
-
-if(
-!websitePattern.test(url)
-){
-
-showNotification(
-"Enter real website"
-);
-
-return;
-
-}
-
 try{
 
 navigateTo(
@@ -973,7 +958,6 @@ headers:{
 },
 
 body:
-
 JSON.stringify({
 
 url
@@ -986,6 +970,34 @@ url
 
 const data =
 await response.json();
+
+console.log(
+"SCAN RESPONSE:",
+data
+);
+
+if(
+!response.ok
+||
+data.error
+){
+
+showNotification(
+
+data.error
+||
+
+"Scan Failed"
+
+);
+
+navigateTo(
+"landing"
+);
+
+return;
+
+}
 
 displayScanResults(
 data
@@ -1007,12 +1019,13 @@ showNotification(
 "Scan Failed"
 );
 
-}
+navigateTo(
+"landing"
+);
 
 }
 
-window.startScan =
-startScan;
+}
 
 window.quickScan =
 quickScan;
