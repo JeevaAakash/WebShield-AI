@@ -15,7 +15,7 @@ require(
 
 const Scan =
 require(
-"../models/scan"
+"../models/Scan"
 );
 
 router.post(
@@ -163,8 +163,11 @@ Never return same score.
 );
 
 const text =
-ai.data.reply
+
+ai?.data?.reply
+
 ||
+
 "";
 
 aiScore = {
@@ -246,27 +249,48 @@ const response = {
 ...result,
 
 score:
+
 finalScore,
 
 risk:
 
-aiScore.risk
+aiScore?.risk
 
 ||
 
-result.risk
+result?.risk
 
 ||
 
-"LOW",
+(
+
+finalScore < 50
+
+?
+
+"HIGH"
+
+:
+
+finalScore < 80
+
+?
+
+"MEDIUM"
+
+:
+
+"LOW"
+
+),
 
 aiSummary:
 
-aiScore.summary
+aiScore?.summary
 
 ||
 
-result.aiSummary
+result?.aiSummary
 
 ||
 
