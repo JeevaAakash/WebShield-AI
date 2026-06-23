@@ -308,6 +308,8 @@ response
 
 }
 
+delete response.error;
+
 return res.json(
 response
 );
