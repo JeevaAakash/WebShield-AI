@@ -15,7 +15,7 @@ require(
 
 const Scan =
 require(
-"../models/Scan"
+"../models/scan"
 );
 
 router.post(
