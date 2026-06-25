@@ -937,6 +937,11 @@ return;
 
 try{
 
+document.getElementById(
+"scanning-target-url"
+).textContent =
+url;  
+
 navigateTo(
 "scanning"
 );
