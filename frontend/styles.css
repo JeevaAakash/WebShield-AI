@@ -2093,3 +2093,31 @@ color:black;
 cursor:pointer;
 
 }
+.scan-step-item{
+
+opacity:.45;
+
+transition:.5s;
+
+}
+
+.scan-step-item.active{
+
+opacity:1;
+
+transform:translateX(12px);
+
+box-shadow:
+0 0 30px
+rgba(0,255,150,.35);
+
+}
+
+.scan-step-item.completed{
+
+opacity:1;
+
+border-left:
+4px solid #00ff88;
+
+}

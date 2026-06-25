@@ -239,6 +239,7 @@ function startScanPipeline(targetUrl) {
   // 1. Shift View state to scanning transition screen
   document.getElementById("scanning-target-url").textContent = targetUrl;
   navigateTo("scanning");
+  animateScan();
   
   // 2. Reset step items states
   const steps = ["dns", "ssl", "headers", "vulns"];
@@ -946,6 +947,8 @@ navigateTo(
 "scanning"
 );
 
+animateScan();
+
 const response =
 await fetch(
 
@@ -1302,5 +1305,100 @@ input.value="";
 
 windowBox.scrollTop =
 windowBox.scrollHeight;
+
+}
+async function animateScan(){
+
+const steps = [
+
+"step-dns",
+
+"step-ssl",
+
+"step-headers",
+
+"step-ports"
+
+];
+
+for(const step of steps){
+
+const el =
+document.getElementById(
+step
+);
+
+if(!el)
+continue;
+
+el.classList.remove(
+"completed"
+);
+
+el.classList.add(
+"active"
+);
+
+await new Promise(
+r=>setTimeout(
+r,
+1200
+)
+);
+
+el.classList.remove(
+"active"
+);
+
+el.classList.add(
+"completed"
+);
+
+}
+
+}
+async function animateScan(){
+
+const steps=[
+
+"step-dns",
+
+"step-ssl",
+
+"step-headers",
+
+"step-ports"
+
+];
+
+for(let i=0;i<steps.length;i++){
+
+const el=
+document.getElementById(
+steps[i]
+);
+
+if(!el)
+continue;
+
+el.style.opacity="1";
+
+el.style.transform=
+"translateX(15px)";
+
+el.style.boxShadow=
+"0 0 30px rgba(0,255,120,.5)";
+
+await new Promise(
+r=>setTimeout(
+r,
+1200
+)
+);
+
+el.style.transform=
+"translateX(0px)";
+
+}
 
 }
